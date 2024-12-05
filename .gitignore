@@ -1,3 +1,4 @@
 biocmd.egg-info/
 build/
 dist/
+biocmd/__pycache__
