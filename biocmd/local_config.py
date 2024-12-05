@@ -22,7 +22,7 @@ def load_config():
             config_string = f.read()
             return json.loads(config_string)
     else:
-        print("[Biolab] Use config command to set 'server' and 'port' first");
+        print("[Biolab] Use 'biocmd local' command to set 'server','port' and 'token' first");
         return {}
 
 def check():

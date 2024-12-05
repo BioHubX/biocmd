@@ -6,7 +6,8 @@ setup(
     description='BioLab Client',
     author='Yaping-Liu',
     author_email='applesline@163.com',
-    # packages=find_packages(),
+    license='Apache License 2.0',
+    url="https://github.com/BioHubX/biocmd",
     packages = ['biocmd'],
     entry_points={
         'console_scripts': [

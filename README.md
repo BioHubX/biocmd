@@ -18,8 +18,8 @@ pip install dist/*.whl
 
      定义了一个名为"单菌分析流程"的新工作流[singlestrain]，singlestrain工作流包含了两个分析步骤["qcstat","dataassembly"]，其中dataassembly流程需要依赖qcstat分析流程的结果
 ```commandline
-biocmd pipeline create --name "单菌分析流程" --code singlestrain --step qcstat
-biocmd pipeline create --name "单菌分析流程" --code singlestrain --step dataassembly --prestep "qcstat"
+biocmd workflow create --name "单菌分析流程" --code singlestrain --step qcstat
+biocmd workflow create --name "单菌分析流程" --code singlestrain --step dataassembly --prestep "qcstat"
 ```
 
 
@@ -27,17 +27,17 @@ biocmd pipeline create --name "单菌分析流程" --code singlestrain --step da
 
     为工作流中的qcstat、dataassembly步骤配置标准的算法，其中qcstat步骤的算法为biohubx/qcstat:v0.1.0,其中dataassembly步骤的算法为biohubx/dataassembly:v0.1.0
 ```commandline
-biocmd script create --workflowcode singlestrain --step qcstat --script docker.io/qcstat:v1.0.1
-biocmd script create --workflowcode singlestrain --step dataassembly --script docker.io/dataassembly:v1.0.1
+biocmd script create --workflow singlestrain --step qcstat --script biohubx/qcstat:v0.1.0
+biocmd script create --workflow singlestrain --step dataassembly --script biohubx/dataassembly:v0.1.0
 ```
 
 > 3.创建算法的Input模板
 
     定义工作流中的qcstat算法需要依赖file1和file2两个输入参数，分析结果是一个qcstat.txt文件，其中及Output模板中的qcstat.txt可用于自动检查是否完成了分析任务
 ```commandline
-biocmd env create --workflowcode singlestrain --step qcstat --type Input --key read1 --feature _R1.fq.gz
-biocmd env create --workflowcode singlestrain --step qcstat --type Input --key read2 --feature _R2.fq.gz
-biocmd env create --workflowcode singlestrain --step qcstat --type Output --key file1 --feature qcstat.txt
+biocmd env create --workflow singlestrain --step qcstat --type Input --key read1 --feature _R1.fq.gz
+biocmd env create --workflow singlestrain --step qcstat --type Input --key read2 --feature _R2.fq.gz
+biocmd env create --workflow singlestrain --step qcstat --type Output --key file1 --feature qcstat.txt
 ```
 
 > 4.从本地注册样本数据

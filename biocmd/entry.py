@@ -5,16 +5,8 @@ from . import bio_data
 from . import pipeline
 from . import bio_script
 from . import bio_env
-from . import task
+from . import bio_task
 from . import server_config
-
-from biocmd.local_config import set_config, load_config, check
-from biocmd.bio_data import create_file,list_file
-from biocmd.pipeline import create_workflow, list_workflow
-from biocmd.bio_script import create_script,list_script
-from biocmd.bio_env import create_env, list_env
-from biocmd.task import create_task, list_task
-from biocmd.server_config import create_config, list_config
 
 @click.group()
 def cli():
@@ -22,10 +14,10 @@ def cli():
     pass
 
 @cli.group()
-def pipeline():
+def workflow():
     """ Define the dependencies between processes
 
-    For example: biocmd pipeline create --name 'Strain Analysis pipeline' --code StrainAnalysis --step assembly --prestep qcstat --prestep datafilter
+    For example: biocmd workflow create --name 'Strain Analysis pipeline' --code StrainAnalysis --step assembly --prestep qcstat --prestep datafilter
 
     The above example means that creating a new pipeline requires specifying the name of the pipeline, the unique code of the pipeline, the name of the current algorithm of the pipeline, and the name of the pre-algorithm ["qcstat","datafilter"] that the algorithm depends on
     """
@@ -94,7 +86,7 @@ def server():
 def local():
     """ Configure the remote server address, port, and token
 
-    For example: biocmd local --server http://localhost --port 8080 --token xxxxxxxx
+    For example: biocmd local set --server http://localhost --port 8080 --token xxxxxxxx
 
     The above example means that the client is connected to the biolab server deployed at localhost, the service exposed port is 8080, and the token is a string automatically generated when the biolab service is started
     """
@@ -112,7 +104,7 @@ def set(server,port,token):
     local_config.set_config(server, port, token)
 
 
-@pipeline.command()
+@workflow.command()
 @click.option('--name', required=True, help='Pipeline name')
 @click.option('--code', required=True, help='Pipeline code')
 @click.option('--step', required=True, help='Step name in the pipeline code')
@@ -127,7 +119,8 @@ def create(name,code,step, prestep):
             return
     pipeline.create_workflow(name, code, step, prestep)
 
-@pipeline.command()
+
+@workflow.command()
 @click.option('--workflow', required=False, help='Pipeline code')
 def list(workflow):
     """
@@ -201,16 +194,15 @@ def create(workflow,step,uniqueno):
     """
         --workflow,--step, --uniqueno must be provided
     """
-    task.create_task(workflow,step, uniqueno)
+    bio_task.create_task(workflow,step, uniqueno)
 
-@task.command()
-@click.option('--workflow', required=True, help='Unique pipeline code')
-@click.option('--step', required=True, help='Step name in a pipeline')
-def list(workflow, step):
-    """
-        --workflow,--step  must be provided
-    """
-    task.list_task(workflow, step)
+# @task.command()
+# @click.option('--workflow', required=True, help='Unique pipeline code')
+# def list(workflow):
+#     """
+#         --workflow  must be provided
+#     """
+#     bio_task.list_task(workflow)
 
 @server.command()
 @click.option('--key', required=True, help='Only one of [server,parallel,outputDir]')
